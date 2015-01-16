@@ -142,7 +142,7 @@ foreach my $server (@servers) {
         $body .= "=" x length($map_id_server{$server->{reference}});
         $body .= "\n";
         foreach my $zone (@{$server->{zones}}) {
-            if ($zone->{availability} !~ /unavailable|unknown/) {
+            if ($zone->{availability} =~ /unavailable|unknown/) {
                 $body .= $map_dc_id{$zone->{zone}}." : Available\n";
                 $total++;
             }
