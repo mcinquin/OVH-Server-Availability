@@ -1,4 +1,4 @@
-OVH-Servers-Alert
+#OVH-Server-Availability
 
 ## Review 
 This PERL script check Kimsufi/SYS servers availibility for purchase and send an email.
