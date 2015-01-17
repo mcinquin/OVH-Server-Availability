@@ -2,7 +2,8 @@
 ###
 # Version  Date      Author  Description
 #----------------------------------------------
-# 1.0      16/01/15  Shini   Initial version
+# 0.1      16/01/15  Shini   Initial version
+# 0.2      17/01/15  Shini   Add checking for options
 #
 ###
 # GPL Licence 2.0.
@@ -78,11 +79,12 @@ my $total = 0;
 my $content;
 my $url = 'https://ws.ovh.com/dedicated/r2/ws.dispatcher/getAvailability2';
 my %options = (
-    "smtp-host" => undef, "smtp-port" => undef, "smtp-user" => undef, "smtp-password" => undef, "to" => undef,
-    "from" => undef, "zone" => undef, "server" => undef, "layer" => undef,
+    "smtp-host" => undef, "smtp-port" => '25', "smtp-user" => undef,
+    "smtp-password" => undef, "to" => undef, "from" => undef, "zone" => undef,
+    "server" => undef, "layer" => 'tls', "timeout" => "60", "auth" => 'LOGIN',
 );
-my $version = "0.1";
-my $change_date = "16/01/2015";
+my $version = "0.2";
+my $change_date = "17/01/2015";
 
 #Parameters
 Getopt::Long::Configure('bundling');
@@ -98,15 +100,51 @@ GetOptions(
     "auth=s"          => \$options{'auth'},
     "layer=s"         => \$options{'layer'},
     "mail"            => \$options{'mail'},
+    "timeout"         => \$options{'timeout'},
 
 );
 
+#Checking
+if (defined($options{'mail'}) && !defined($options{'from'})) {
+    print "Need --from option\n";
+    exit 1;
+}
+
+if (defined($options{'mail'}) && !defined($options{'to'})) {
+    print "Need --to option\n";
+    exit 1;
+}
+
+if (defined($options{'mail'}) && !defined($options{'smtp-host'})) {
+    print "Need --smtp-host option\n";
+    exit 1;
+}
+
+if (defined($options{'smtp-user'}) && !defined($options{'smtp-password'})) {
+    print "Need --smtp-password option\n";
+    exit 1;
+}
+
+if (defined($options{'smtp-password'}) && !defined($options{'smtp-user'})) {
+    print "Need --smtp-user option\n";
+    exit 1;
+}
+
+if ($options{'auth'} eq 'LOGIN' && !defined($options{'smtp-user'}) || !defined($options{'smtp-password'})) {
+    print "Need --smtp-user and --smtp-password options\n";
+    exit 1;
+}
+
+
+
+
+#SMTP connection
 if (defined $options{'mail'}) {
-    #SMTP connection
     ($mail,$error)=Email::Send::SMTP::Gmail->new(-smtp=>$options{'smtp-host'},
                                                     -login=>$options{'smtp-user'},
                                                     -pass=>$options{'smtp-password'},
                                                     -layer=>$options{'layer'},
+                                                    -timeout=>$options{'timeout'},
     );
     print "Session error: $error" unless ($mail!=-1);
 }
@@ -152,6 +190,8 @@ foreach my $server (@servers) {
         }
     }
 }
+
+#Output
 if ($total ne '0' && defined($options{'mail'})) {
     $mail->send(-from=>$options{'from'}, -to=>$options{'to'}, -subject=>'OVH Servers Availalibility!',
                 -body=>$body, -contenttype=>'text/plain',
