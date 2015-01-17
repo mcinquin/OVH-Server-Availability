@@ -73,7 +73,7 @@ my %map_server_id = (
 my %map_id_server = reverse(%map_server_id);
 
 
-my $body;
+my ($body, $mail, $error);
 my $total = 0;
 my $content;
 my $url = 'https://ws.ovh.com/dedicated/r2/ws.dispatcher/getAvailability2';
@@ -97,16 +97,19 @@ GetOptions(
     "smtp-port=i"     => \$options{'smtp-port'},
     "auth=s"          => \$options{'auth'},
     "layer=s"         => \$options{'layer'},
+    "mail"            => \$options{'mail'},
+
 );
 
-#SMTP connection
-my ($mail,$error)=Email::Send::SMTP::Gmail->new(-smtp=>$options{'smtp-host'},
-                                                -login=>$options{'smtp-user'},
-                                                -pass=>$options{'smtp-password'},
-                                                -layer=>$options{'layer'},
-);
-print "Session error: $error" unless ($mail!=-1);
-
+if (defined $options{'mail'}) {
+    #SMTP connection
+    ($mail,$error)=Email::Send::SMTP::Gmail->new(-smtp=>$options{'smtp-host'},
+                                                    -login=>$options{'smtp-user'},
+                                                    -pass=>$options{'smtp-password'},
+                                                    -layer=>$options{'layer'},
+    );
+    print "Session error: $error" unless ($mail!=-1);
+}
 
 
 #User Agent Creation
@@ -149,9 +152,11 @@ foreach my $server (@servers) {
         }
     }
 }
-if ($total ne '0') {
+if ($total ne '0' && defined($options{'mail'})) {
     $mail->send(-from=>$options{'from'}, -to=>$options{'to'}, -subject=>'OVH Servers Availalibility!',
                 -body=>$body, -contenttype=>'text/plain',
     );
+    $mail->bye;
+} elsif ($total ne '0') {
+    print $body;
 }
-$mail->bye;
