@@ -74,7 +74,7 @@ my %map_id_server = reverse(%map_server_id);
 
 
 my $body;
-my $total;
+my $total = 0;
 my $content;
 my $url = 'https://ws.ovh.com/dedicated/r2/ws.dispatcher/getAvailability2';
 my %options = (
