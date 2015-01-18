@@ -4,20 +4,9 @@
 #----------------------------------------------
 # 0.1      16/01/15  Shini   Initial version
 # 0.2      17/01/15  Shini   Add checking for options
+# 1.0      18/01/15  Shini   1.0 stable release
 #
 ###
-# GPL Licence 2.0.
-#
-# This program is free software; you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software
-# Foundation ; either version 2 of the License.
-#
-# This program is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-# PARTICULAR PURPOSE. See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# this program; if not, see <http://www.gnu.org/licenses>.
 
 
 #Init
@@ -30,7 +19,9 @@ use JSON;
 use URI;
 use Email::Send::SMTP::Gmail;
 use Getopt::Long;
-
+use Config::General;
+use FindBin qw($Bin);
+use lib "$Bin/../lib";
 
 #Global Variables
 my %map_dc_id = (
@@ -71,51 +62,33 @@ my %map_server_id = (
     'E3-SSD-4' => '143sys12',
 );
 
+
 my %map_id_server = reverse(%map_server_id);
 
+my $version = "1.0";
+my $change_date = "18/01/2015";
 
 my ($body, $mail, $error);
 my $total = 0;
 my $content;
 my $url = 'https://ws.ovh.com/dedicated/r2/ws.dispatcher/getAvailability2';
-my %options = (
-    "smtp-host" => undef, "smtp-port" => '25', "smtp-user" => undef,
-    "smtp-password" => undef, "to" => undef, "from" => undef, "zone" => undef,
-    "server" => undef, "layer" => 'tls', "timeout" => "60", "auth" => 'LOGIN',
-);
-my $version = "0.2";
-my $change_date = "17/01/2015";
 
-#Parameters
-Getopt::Long::Configure('bundling');
-GetOptions(
-    "server=s"        => \$options{'server'},
-    "zone=s"          => \$options{'zone'},
-    "from=s"          => \$options{'from'},
-    "to=s"            => \$options{'to'},
-    "smtp-user=s"     => \$options{'smtp-user'},
-    "smtp-password=s" => \$options{'smtp-password'},
-    "smtp-host=s"     => \$options{'smtp-host'},
-    "smtp-port=i"     => \$options{'smtp-port'},
-    "auth=s"          => \$options{'auth'},
-    "layer=s"         => \$options{'layer'},
-    "mail"            => \$options{'mail'},
-    "timeout"         => \$options{'timeout'},
+my $conf = Config::General->new($Bin.'/config.ini');
+my %options = $conf->getall;
 
-);
 
-#Checking
-if (defined($options{'mail'}) && !defined($options{'from'})) {
+#Checking options
+if (defined$options{'mail'} eq '1' && !defined($options{'from'})) {
     print "Need --from option\n";
     exit 1;
 }
 
-if (defined($options{'mail'}) && !defined($options{'to'})) {
+if ($options{'mail'} eq '1' && !defined($options{'to'})) {
     print "Need --to option\n";
     exit 1;
 }
 
-if (defined($options{'mail'}) && !defined($options{'smtp-host'})) {
+if (defined$options{'mail'} eq '1' && !defined($options{'smtp-host'})) {
     print "Need --smtp-host option\n";
     exit 1;
 }
@@ -135,16 +108,14 @@ if ($options{'auth'} eq 'LOGIN' && !defined($options{'smtp-user'}) || !defined($
     exit 1;
 }
 
-
-
-
 #SMTP connection
-if (defined $options{'mail'}) {
+if ($options{'mail'} eq '1') {
     ($mail,$error)=Email::Send::SMTP::Gmail->new(-smtp=>$options{'smtp-host'},
-                                                    -login=>$options{'smtp-user'},
-                                                    -pass=>$options{'smtp-password'},
-                                                    -layer=>$options{'layer'},
-                                                    -timeout=>$options{'timeout'},
+                                                 -login=>$options{'smtp-user'},
+                                                 -pass=>$options{'smtp-password'},
+                                                 -layer=>$options{'layer'},
+                                                 -timeout=>$options{'timeout'},
+                                                 -debug=>$options{'debug'},
     );
     print "Session error: $error" unless ($mail!=-1);
 }
@@ -153,12 +124,15 @@ if (defined $options{'mail'}) {
 #User Agent Creation
 my $ua = LWP::UserAgent->new( keep_alive => '1', protocols_allowed => ['https'], timeout => '10');
 
+
 #URI Creation
 my $uri = URI->new($url);
+
 
 #Web Page connection
 my $req = HTTP::Request->new( GET => $uri);
 my $response = $ua->request($req);
+
 
 #JSON Decoding
 if ($response->is_success) {
@@ -175,6 +149,7 @@ if ($response->is_success) {
     print "Cannot connect to webpage\n";
 }
 
+
 #JSON Parsing
 my @servers = @{$content->{answer}->{availability}};
 foreach my $server (@servers) {
@@ -184,18 +159,21 @@ foreach my $server (@servers) {
         $body .= "\n";
         foreach my $zone (@{$server->{zones}}) {
             if ($zone->{availability} !~ /unavailable|unknown/) {
-                $body .= $map_dc_id{$zone->{zone}}." : Available\n";
+                $body .= $map_dc_id{$zone->{zone}}.": Available\n";
                 $total++;
             }
         }
     }
 }
 
+
 #Output
-if ($total ne '0' && defined($options{'mail'})) {
-    $mail->send(-from=>$options{'from'}, -to=>$options{'to'}, -subject=>'OVH Servers Availalibility!',
+if ($total ne '0' && $options{'mail'} eq '1') {
+die "Error sending email: $@" if $@;
+    eval { $mail->send(-from=>$options{'from'}, -to=>$options{'to'}, -subject=>'OVH Servers Availalibility!',
                 -body=>$body, -contenttype=>'text/plain',
-    );
+    )};
+    die "Error sending email: $@" if $@;
     $mail->bye;
 } elsif ($total ne '0') {
     print $body;

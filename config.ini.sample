@@ -1,0 +1,12 @@
+server = KS-1
+from = foo@example.org
+to = foobar@example.org
+smtp-user = foo@example.org
+smtp-password = password
+smtp-host = smtp.example.org
+smtp-port = 465
+auth = LOGIN
+layer = ssl
+mail = 1
+timeout = 60
+debug = 0
