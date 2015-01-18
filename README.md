@@ -1,6 +1,6 @@
 #OVH-Server-Availability
 
-##Review 
+##Review
 This PERL script check Kimsufi/SYS servers availibility for purchase. 
 You can chosse between sending an email or just showing in standard output as notification.
 
@@ -17,14 +17,14 @@ You can chosse between sending an email or just showing in standard output as no
 ##Installation
 
 * Clone the repository (`git clone https://github.com/Shini31/OVH-Server-Availability.git`) or download and unpack the archives
-* Install the PERL modules: sudo cpan LWP::UserAgent URI JSON Email::Send::SMTP::Gmail Config::General
+* Install the PERL modules: `sudo cpan LWP::UserAgent URI JSON Email::Send::SMTP::Gmail Config::General`
 * Take config.ini.example as a template, create a file config.ini and correct configuration according to your preferences
 * Create a cron job to send you a mail periodically
 
 ##Configuration
 
 Take config.ini.example as a template, create a file config.ini in same PERL script directory and correct configuration according to your preferences:
-* `server`: Type of OVH/Kimsufi server (eg: `KS-1`, `SYS-IP-6, `GAME-3`, `E3-SAT-1`, ...)
+* `server`: Type of OVH/Kimsufi server (eg: `KS-1`, `SYS-IP-6`, `GAME-3`, `E3-SAT-1`, ...)
 * `mail`: active or not sending an email (`0` or `1`)
   * `smtp-host`: SMTP host (eg: `smtp.example.org`)
   * `from`: sender email address (eg: `foo@example.com)
