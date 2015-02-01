@@ -144,9 +144,11 @@ if ($response->is_success) {
 
     if ($@) {
         print "Cannot decode json response\n";
+        exit 1;
     }
 } else {
     print "Cannot connect to webpage\n";
+    exit 1;
 }
 
 
