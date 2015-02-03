@@ -5,6 +5,7 @@
 # 0.1      16/01/15  Shini   Initial version
 # 0.2      17/01/15  Shini   Add checking for options
 # 1.0      18/01/15  Shini   1.0 stable release
+# 1.1      03/02/15  Shini   Minor fixes
 #
 ###
 
@@ -13,7 +14,6 @@
 use strict;
 use warnings;
 
-use Data::Dumper;
 use LWP::UserAgent;
 use JSON;
 use URI;
@@ -65,8 +65,8 @@ my %map_server_id = (
 
 my %map_id_server = reverse(%map_server_id);
 
-my $version = "1.0";
-my $change_date = "18/01/2015";
+my $version = "1.1";
+my $change_date = "03/02/2015";
 
 my ($body, $mail, $error);
 my $total = 0;
