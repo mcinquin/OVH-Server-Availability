@@ -117,7 +117,8 @@ if ($options{'mail'} eq '1') {
                                                  -timeout=>$options{'timeout'},
                                                  -debug=>$options{'debug'},
     );
-    print "Session error: $error" unless ($mail!=-1);
+    print "Session error: $error\n" unless ($mail!=-1);
+    exit 1;
 }
 
 
