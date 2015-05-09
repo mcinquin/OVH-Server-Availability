@@ -2,10 +2,10 @@
 
 ##Review
 This PERL script check Kimsufi/SYS servers availibility for purchase. 
-You can chosse between sending an email or just showing in standard output as notification.
+You can choose between sending an email or just showing in standard output as notification.
 
 ##Version
-1.0
+1.1
 
 ##Requirements
 * LWP::UserAgent
@@ -46,7 +46,7 @@ Take config.ini.example as a template, create a file config.ini in same PERL scr
 
 
 ##Cron configuration
-If you want receive email, you must a cron job.
+If you want receive email, you must create a cron job.
 
     */10 * * * * ovh-server-availability.pl
 
