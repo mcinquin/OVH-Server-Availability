@@ -6,6 +6,7 @@
 # 0.2      17/01/15  Shini   Add checking for options
 # 1.0      18/01/15  Shini   1.0 stable release
 # 1.1      03/02/15  Shini   Minor fixes
+# 1.2      22/11/15  Shini   Minor fixes
 #
 ###
 
@@ -65,8 +66,8 @@ my %map_server_id = (
 
 my %map_id_server = reverse(%map_server_id);
 
-my $version = "1.1";
-my $change_date = "03/02/2015";
+my $version = "1.2";
+my $change_date = "22/11/2015";
 
 my ($body, $mail, $error);
 my $total = 0;
@@ -78,7 +79,7 @@ my %options = $conf->getall;
 
 
 #Checking options
-if (defined$options{'mail'} eq '1' && !defined($options{'from'})) {
+if (defined($options{'mail'} eq '1' && !defined($options{'from'})) {
     print "Need --from option\n";
     exit 1;
 }
@@ -88,7 +89,7 @@ if ($options{'mail'} eq '1' && !defined($options{'to'})) {
     exit 1;
 }
 
-if (defined$options{'mail'} eq '1' && !defined($options{'smtp-host'})) {
+if (defined($options{'mail'} eq '1' && !defined($options{'smtp-host'})) {
     print "Need --smtp-host option\n";
     exit 1;
 }
