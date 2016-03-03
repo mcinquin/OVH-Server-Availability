@@ -7,6 +7,7 @@
 # 1.0      18/01/15  Shini   1.0 stable release
 # 1.1      03/02/15  Shini   Minor fixes
 # 1.2      22/11/15  Shini   Minor fixes
+# 1.3      03/03/16  Shini   Update servers list
 #
 ###
 
@@ -30,25 +31,30 @@ my %map_dc_id = (
     'rbx' => 'Roubaix',
     'sbg' => 'Strasbourg',
     'bhs' => 'Beauharnois',
+    'par' => 'Paris',
 );
 
 my %map_server_id = (
-    'KS-1' => '150sk10',
-    'KS-2a' => '150sk20',
-    'KS-2b' => '150sk21',
-    'KS-2c' => '150sk22',
-    'KS-3' => '150sk30',
-    'KS-4' => '150sk40',
-    'KS-5' => '150sk50',
-    'KS-6' => '150sk60',
+    'KS-1' => '160sk1',
+    'KS-2a' => '160sk2',
+    'KS-2b' => '160sk21',
+    'KS-2c' => '160sk22',
+    'KS-2d' => '160sk23',
+    'KS-3a' => '160sk3',
+    'KS-3b' => '160sk31',
+    'KS-3c' => '160sk32',
+    'KS-4a' => '160sk4',
+    'KS-4b' => '161sk41',
+    'KS-4c' => '160sk42',
+    'KS-5' => '160sk5',
+    'KS-6' => '160sk6',
     'GAME-1' => '141game1',
     'GAME-2' => '141game2',
-    'GAME-3' => '141game3',
     'BK-8T' => '141bk1',
     'BK-24T' => '141bk2',
     'SYS-IP-1' => '142sys4',
     'SYS-IP-2' => '142sys5',
-    'SYS-IP-4' => '142sys5',
+    'SYS-IP-4' => '142sys8',
     'SYS-IP-5' => '142sys6',
     'SYS-IP-5S' => '142sys10',
     'SYS-IP-6' => '142sys7',
@@ -66,8 +72,8 @@ my %map_server_id = (
 
 my %map_id_server = reverse(%map_server_id);
 
-my $version = "1.2";
-my $change_date = "22/11/2015";
+my $version = "1.3";
+my $change_date = "03/03/2016";
 
 my ($body, $mail, $error);
 my $total = 0;
