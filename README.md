@@ -5,7 +5,7 @@ This PERL script check Kimsufi/SYS servers availibility for purchase.
 You can choose between sending an email or just showing in standard output as notification.
 
 ##Version
-1.1
+1.3
 
 ##Requirements
 * LWP::UserAgent
