@@ -85,7 +85,7 @@ my %options = $conf->getall;
 
 
 #Checking options
-if (defined($options{'mail'} eq '1' && !defined($options{'from'})) {
+if (defined($options{'mail'} eq '1') && !defined($options{'from'})) {
     print "Need --from option\n";
     exit 1;
 }
@@ -95,7 +95,7 @@ if ($options{'mail'} eq '1' && !defined($options{'to'})) {
     exit 1;
 }
 
-if (defined($options{'mail'} eq '1' && !defined($options{'smtp-host'})) {
+if (defined($options{'mail'} eq '1') && !defined($options{'smtp-host'})) {
     print "Need --smtp-host option\n";
     exit 1;
 }
