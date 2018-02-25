@@ -1,27 +1,27 @@
-#OVH-Server-Availability
+# OVH-Server-Availability
 
-##Review
+## Review
 This PERL script check Kimsufi/SYS servers availibility for purchase. 
 You can choose between sending an email or just showing in standard output as notification.
 
 ##Version
 1.3
 
-##Requirements
+## Requirements
 * LWP::UserAgent
 * URI
 * JSON
 * Email::Send::SMTP::Gmail
 * Config::General
 
-##Installation
+## Installation
 
 * Clone the repository (`git clone https://github.com/Shini31/OVH-Server-Availability.git`) or download and unpack the archives
 * Install the PERL modules: `sudo cpan LWP::UserAgent URI JSON Email::Send::SMTP::Gmail Config::General`
 * Take config.ini.example as a template, create a file config.ini and correct configuration according to your preferences
 * Create a cron job to send you a mail periodically
 
-##Configuration
+## Configuration
 
 Take config.ini.example as a template, create a file config.ini in same PERL script directory and correct configuration according to your preferences:
 * `server`: Type of OVH/Kimsufi server (eg: `KS-1`, `SYS-IP-6`, `GAME-3`, `E3-SAT-1`, ...)
@@ -39,7 +39,7 @@ Take config.ini.example as a template, create a file config.ini in same PERL scr
 
 
 
-##Output example
+## Output example
     KS-2c
     =====
     Roubaix : Available
