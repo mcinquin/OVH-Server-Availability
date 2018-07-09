@@ -5,7 +5,7 @@ This PERL script check Kimsufi/SYS servers availibility for purchase.
 You can choose between sending an email or just showing in standard output as notification.
 
 ##Version
-1.3
+1.4
 
 ## Requirements
 * LWP::UserAgent
@@ -40,7 +40,7 @@ Take config.ini.example as a template, create a file config.ini in same PERL scr
 
 
 ## Output example
-    KS-2c
+    KS-2
     =====
     Roubaix : Available
 
