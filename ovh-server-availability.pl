@@ -8,6 +8,7 @@
 # 1.1      03/02/15  Shini   Minor fixes
 # 1.2      22/11/15  Shini   Minor fixes
 # 1.3      03/03/16  Shini   Update servers list
+# 1.4      09/07/18  Shini   Update servers and zones lists
 #
 ###
 
@@ -32,48 +33,67 @@ my %map_dc_id = (
     'sbg' => 'Strasbourg',
     'bhs' => 'Beauharnois',
     'par' => 'Paris',
+    'fra' => 'Francfort',
+    'syd' => 'Sydney',
+    'vin' => 'Vint Hill',
+    'hil' => 'Hillsboro',
+    'waw' => 'Warsaw',
+    'rbx-hz' => 'Roubaix HardZone',
+    'lon' => 'Londres',
+    'sgp' => 'Singapour'
 );
 
 my %map_server_id = (
-    'KS-1' => '160sk1',
-    'KS-2a' => '160sk2',
-    'KS-2b' => '160sk21',
-    'KS-2c' => '160sk22',
-    'KS-2d' => '160sk23',
-    'KS-3a' => '160sk3',
-    'KS-3b' => '160sk31',
-    'KS-3c' => '160sk32',
-    'KS-4a' => '160sk4',
-    'KS-4b' => '161sk41',
-    'KS-4c' => '160sk42',
-    'KS-5' => '160sk5',
-    'KS-6' => '160sk6',
-    'GAME-1' => '141game1',
-    'GAME-2' => '141game2',
-    'BK-8T' => '141bk1',
-    'BK-24T' => '141bk2',
-    'SYS-IP-1' => '142sys4',
-    'SYS-IP-2' => '142sys5',
-    'SYS-IP-4' => '142sys8',
-    'SYS-IP-5' => '142sys6',
-    'SYS-IP-5S' => '142sys10',
-    'SYS-IP-6' => '142sys7',
-    'SYS-IP-6S' => '142sys9',
-    'E3-SAT-1' => '143sys4',
-    'E3-SSD-1' => '143sys13',
-    'E3-SAT-2' => '143sys1',
-    'E3-SSD-2' => '143sys10',
-    'E3-SAT-3' => '143sys2',
-    'E3-SSD-3' => '143sys11',
-    'E3-SAT-4' => '143sys3',
-    'E3-SSD-4' => '143sys12',
+    'KS-1' => '1801sk12',
+    'KS-2' => '1801sk13',
+    'KS-3' => '1801sk14',
+    'KS-4' => '1801sk15',
+    'KS-5' => '1801sk16',
+    'KS-6' => '1801sk17',
+    'KS-7' => '1801sk18',
+    'KS-8' => '1801sk19',
+    'KS-9' => '1801sk20',
+    'KS-10' => '1801sk21',
+    'KS-11' => '1801sk22',
+    'KS-12' => '1801sk23',
+    'GAME-1' => '1801sysgame04',
+    'GAME-2' => '1801sysgame05',
+    'GAME-3' => '1801sysgame06',
+    'OP-SAT-1-32' => '1801sys46',
+    'OP-SAT-2-128' => '1801sys52',
+    'E3-SAT-1-16' => '1801sys45',
+    'E3-SAT-1-32' => '1801sys48',
+    'E3-SSD-1-32' => '1801sys47',
+    'E3-SSD3-16' => '1801sys221',
+    'E3-SAT3-16' => '1801sys22',
+    'E3-SSD-5-32' => '1801sys13',
+    'E3-SAT-3-32' => '1801sys01',
+    'E3-SAT3-32' => '1801sys23',
+    'I7-SSD-1-32' => '1801sys16',
+    'E3-SAT-2-32' => '1801sys011',
+    'E3-SAT-2-32' => '1801sys50',
+    'E3-SSD-2-32' => '1801sys49',
+    'E5v3-SAT-1-32' => '1801sys24',
+    'E5-SAT-1-64' => '1801sys53',
+    'E5-SSD-1-64' => '1801sys54',
+    'E5v3-SSD-1-32' => '1801sys242',
+    'E5-SAT-2-64' => '1801sys56',
+    'E5-SSD-2-64' => '1801sys55',
+    'ARM-2T' => '1801armada01',
+    'ARM-4T' => '1801armada02',
+    'ARM-6T' => '1801armada03',
+    'E5-SSD-3-64' => '1801sys57',
+    'E5-SSD-1-128' => '1801sys58',
+    'E5-SSD-1-192' => '1801sys59',
+    'E5-SSD-1-256' => '1801sys60',
+    'E5-SSD-2-128' => '1801sys61'
 );
 
 
 my %map_id_server = reverse(%map_server_id);
 
-my $version = "1.3";
-my $change_date = "03/03/2016";
+my $version = "1.4";
+my $change_date = "09/07/2018";
 
 my ($body, $mail, $error);
 my $total = 0;
@@ -130,7 +150,7 @@ if ($options{'mail'} eq '1') {
 
 
 #User Agent Creation
-my $ua = LWP::UserAgent->new( keep_alive => '1', protocols_allowed => ['https'], timeout => '10');
+my $ua = LWP::UserAgent->new( keep_alive => '1', protocols_allowed => ['https'], timeout => '20');
 
 
 #URI Creation
