@@ -30,11 +30,11 @@ Take config.ini.example as a template, create a file config.ini in same PERL scr
   * `from`: sender email address (eg: `foo@example.com`)
   * `to`: receiver email address (eg: `foobar@example.com`)
   * `timeout`: connection timeout (eg: `60`)
-  * `auth`: activate or not SMTP authentication (`none` or `LOGIN`)
-    * `smtp-user`: SMTP username (eg: `foo@example.com`)
-    * `smtp-password`: SMTP password (eg: `password`)
-  * `layer`: Security layer (`none`, `tls`, `ssl`)
-  * `port`: SMTP port according to layer (`25`, `465`, `587`)
+  * `smtp-auth`: activate or not SMTP authentication (`none` or `LOGIN`)
+    * `smtp-user`: SMTP username (eg: `` or `foo@example.com`)
+    * `smtp-password`: SMTP password (eg: `` or `password`)
+  * `smtp-layer`: Security layer (`none`, `tls`, `ssl`)
+  * `smtp-port`: SMTP port according to layer (``, `25`, `465`)
   * `debug`: active or not SMTP debug (`0` or `1`)
 
 
@@ -45,7 +45,7 @@ Take config.ini.example as a template, create a file config.ini in same PERL scr
     Roubaix : Available
 
 
-##Cron configuration
+## Cron configuration
 If you want receive email, you must create a cron job.
 
     */10 * * * * ovh-server-availability.pl

@@ -9,7 +9,8 @@
 # 1.2      22/11/15  Shini   Minor fixes
 # 1.3      03/03/16  Shini   Update servers list
 # 1.4      09/07/18  Shini   Update servers and zones lists
-#
+# 1.5      11/07/18  Shini   Fix issue with mail
+##
 ###
 
 
@@ -92,8 +93,8 @@ my %map_server_id = (
 
 my %map_id_server = reverse(%map_server_id);
 
-my $version = "1.4";
-my $change_date = "09/07/2018";
+my $version = "1.5";
+my $change_date = "11/07/2018";
 
 my ($body, $mail, $error);
 my $total = 0;
@@ -130,37 +131,20 @@ if (defined($options{'smtp-password'}) && !defined($options{'smtp-user'})) {
     exit 1;
 }
 
-if ($options{'auth'} eq 'LOGIN' && !defined($options{'smtp-user'}) || !defined($options{'smtp-password'})) {
+if ($options{'smtp-auth'} ne 'none' && !defined($options{'smtp-user'}) || !defined($options{'smtp-password'})) {
     print "Need --smtp-user and --smtp-password options\n";
     exit 1;
 }
 
-#SMTP connection
-if ($options{'mail'} eq '1') {
-    ($mail,$error)=Email::Send::SMTP::Gmail->new(-smtp=>$options{'smtp-host'},
-                                                 -login=>$options{'smtp-user'},
-                                                 -pass=>$options{'smtp-password'},
-                                                 -layer=>$options{'layer'},
-                                                 -timeout=>$options{'timeout'},
-                                                 -debug=>$options{'debug'},
-    );
-    print "Session error: $error\n" unless ($mail!=-1);
-    exit 1;
-}
-
-
 #User Agent Creation
 my $ua = LWP::UserAgent->new( keep_alive => '1', protocols_allowed => ['https'], timeout => '20');
-
 
 #URI Creation
 my $uri = URI->new($url);
 
-
 #Web Page connection
 my $req = HTTP::Request->new( GET => $uri);
 my $response = $ua->request($req);
-
 
 #JSON Decoding
 if ($response->is_success) {
@@ -179,7 +163,6 @@ if ($response->is_success) {
     exit 1;
 }
 
-
 #JSON Parsing
 my @servers = @{$content->{answer}->{availability}};
 foreach my $server (@servers) {
@@ -196,10 +179,19 @@ foreach my $server (@servers) {
     }
 }
 
-
 #Output
 if ($total ne '0' && $options{'mail'} eq '1') {
-die "Error sending email: $@" if $@;
+	#SMTP connection
+    ($mail,$error)=Email::Send::SMTP::Gmail->new(-smtp=>$options{'smtp-host'},
+                                                 -auth=>$options{'smtp-auth'},
+                                                 -login=>$options{'smtp-user'},
+                                                 -pass=>$options{'smtp-password'},
+                                                 -layer=>$options{'smtp-layer'},
+                                                 -timeout=>$options{'timeout'},
+                                                 -debug=>$options{'debug'},
+    );
+    print "Session error: $error\n" unless ($mail!=-1);
+
     eval { $mail->send(-from=>$options{'from'}, -to=>$options{'to'}, -subject=>'OVH Servers Availalibility!',
                 -body=>$body, -contenttype=>'text/plain',
     )};
